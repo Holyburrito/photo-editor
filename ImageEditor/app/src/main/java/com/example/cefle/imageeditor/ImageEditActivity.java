@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -44,10 +45,18 @@ public class ImageEditActivity extends AppCompatActivity {
      */
     private void findViews() {
         imageView = (ImageView) findViewById(R.id.iv_image);
-        imageView.setOnClickListener(new View.OnClickListener() {
+        imageView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                imageView.setImageBitmap(BitmapUtil.badBlur((BitmapDrawable) imageView.getDrawable()));
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                final int action = motionEvent.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN: {
+
+                    }
+                }
+
+                return true;
             }
         });
     }
