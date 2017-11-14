@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 public class DashboardActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_SELECT_FROM_GALLERY = 100;
 
-    private Button selectFromGalleryButton;
+    private ImageButton selectFromGalleryButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void findViews() {
-        selectFromGalleryButton = (Button) findViewById(R.id.btn_select_from_gallery);
+        selectFromGalleryButton = (ImageButton) findViewById(R.id.btn_select_from_gallery);
     }
 
     private void attachListeners() {
