@@ -56,7 +56,7 @@ public class BitmapUtil {
                 int averagedG = totalG / totalPixels;
                 int averagedB = totalB / totalPixels;
 
-                int newColor = Util.argbToColorInt(averagedA, averagedR, averagedG, averagedB);
+                int newColor = ColorUtil.argbToColorInt(averagedA, averagedR, averagedG, averagedB);
                 blurred.setPixel(j, i, newColor);
 
             }
@@ -69,7 +69,7 @@ public class BitmapUtil {
         for (int i = 0; i < bmp.getHeight(); i++) {
             for (int j = 0; j < bmp.getWidth(); j++) {
                 int colorInt = bmp.getPixel(j, i);
-                int newColor = Util.modifyColor(colorInt, DARKEN_AMOUNT);
+                int newColor = ColorUtil.modifyColor(colorInt, DARKEN_AMOUNT);
                 bmp.setPixel(j, i, newColor);
             }
         }
@@ -81,7 +81,7 @@ public class BitmapUtil {
         for (int i = 0; i < bmp.getHeight(); i++) {
             for (int j = 0; j < bmp.getWidth(); j++) {
                 int colorInt = bmp.getPixel(j, i);
-                int newColor = Util.modifyColor(colorInt, BRIGHTEN_AMOUNT);
+                int newColor = ColorUtil.modifyColor(colorInt, BRIGHTEN_AMOUNT);
                 bmp.setPixel(j, i, newColor);
             }
         }

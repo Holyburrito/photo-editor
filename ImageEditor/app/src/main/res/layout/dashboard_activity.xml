@@ -13,42 +13,88 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:gravity="center"
         android:background="@drawable/dashboard_gradient">
 
         <LinearLayout
+            android:id="@+id/btn_select_from_gallery"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center">
 
-            <ImageButton
-                android:id="@+id/btn_select_from_gallery"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_gallery_select"
-                android:background="@android:color/transparent"
-                android:scaleX="0.75"
-                android:scaleY="0.75"
-                android:tint="@color/colorAccentLight">
-            </ImageButton>
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/layout_border">
 
-            <ImageButton
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:src="@drawable/ic_gallery_select"
+                    android:background="@android:color/transparent"
+                    android:scaleX="0.75"
+                    android:scaleY="0.75"
+                    android:tint="@color/colorAccentLight">
+                </ImageButton>
+
+                <TextView
+                    android:id="@+id/text_select_from_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:gravity="center"
+                    android:text="@string/btn_select_from_gallery"
+                    android:textColor="@color/colorAccentLight"
+                    android:fontFamily="sans-serif-black"
+                    android:textSize="24sp">
+                </TextView>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="0dp">
+            </View>
+
+            <LinearLayout
                 android:id="@+id/btn_capture_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_camera_icon"
-                android:background="@android:color/transparent"
-                android:scaleX="0.75"
-                android:scaleY="0.75"
-                android:tint="@color/colorAccentLight">
-            </ImageButton>
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/layout_border">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:src="@drawable/ic_camera_icon"
+                    android:background="@android:color/transparent"
+                    android:scaleX="0.75"
+                    android:scaleY="0.75"
+                    android:tint="@color/colorAccentLight">
+                </ImageButton>
+
+                <TextView
+                    android:id="@+id/text_capture_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:gravity="center"
+                    android:text="@string/btn_take_picture"
+                    android:textColor="@color/colorAccentLight"
+                    android:fontFamily="sans-serif-black"
+                    android:textSize="24sp">
+                </TextView>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-
-
     </LinearLayout>
-
-
 
 </LinearLayout>

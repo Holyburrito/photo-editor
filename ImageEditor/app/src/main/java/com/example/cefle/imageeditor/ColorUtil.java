@@ -6,7 +6,7 @@ import android.graphics.Color;
  * Created by Buster on 11/10/2017.
  */
 
-public class Util {
+public class ColorUtil {
 
     public static int argbToColorInt(int a, int r, int g, int b) {
         return (a & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
@@ -22,7 +22,7 @@ public class Util {
         g = (g * colorModifier > 255) ? 255 : (int) (g * colorModifier);
         b = (b * colorModifier > 255) ? 255 : (int) (b * colorModifier);
 
-        return Util.argbToColorInt(a, r, g, b);
+        return ColorUtil.argbToColorInt(a, r, g, b);
     }
 
     public static int modifyColor(int colorInt, float aModifier, float rModifier, float gModifier, float bModifier) {
@@ -36,7 +36,7 @@ public class Util {
         g = (g * gModifier > 255) ? 255 : (int) (g * gModifier);
         b = (b * bModifier > 255) ? 255 : (int) (b * bModifier);
 
-        return Util.argbToColorInt(a, r, g, b);
+        return ColorUtil.argbToColorInt(a, r, g, b);
     }
 
 }
