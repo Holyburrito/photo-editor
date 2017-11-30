@@ -12,4 +12,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Image Edit Button -->
+    <style name="IEButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/layout_border_rect</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/colorAccentLight</item>
+        <item name="android:fontFamily">sans-serif-black</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
 </resources>

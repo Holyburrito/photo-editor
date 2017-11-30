@@ -76,7 +76,7 @@ public class BitmapUtil {
         return bmp;
     }
 
-    public static Bitmap brighten(BitmapDrawable bitmapDrawable) {
+    public static Bitmap lighten(BitmapDrawable bitmapDrawable) {
         Bitmap bmp = bitmapDrawable.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
         for (int i = 0; i < bmp.getHeight(); i++) {
             for (int j = 0; j < bmp.getWidth(); j++) {

@@ -26,18 +26,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:background="@drawable/layout_border"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@drawable/image_edit_scrollbar_background">
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:showDividers="middle"
+                        android:divider="@drawable/divider">
 
 
                         <!-- TODO -->
@@ -46,89 +49,22 @@
                             represent all of the actions that can be done on an image.
                         -->
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/layout_border"
-                            android:text="Test"
-                            android:textColor="#FFF"></TextView>
+                            android:id="@+id/ie_darken"
+                            android:text="@string/ie_darken"
+                            style="@style/IEButton">
+                        </TextView>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/layout_border"
-                            android:text="Test"
-                            android:textColor="#FFF"></TextView>
+                            android:id="@+id/ie_brighten"
+                            android:text="@string/ie_lighten"
+                            style="@style/IEButton">
+                        </TextView>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/layout_border"
-                            android:text="Test"
-                            android:textColor="#FFF"></TextView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/layout_border"
-                            android:text="Test"
-                            android:textColor="#FFF"></TextView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/layout_border"
-                            android:text="Test"
-                            android:textColor="#FFF"></TextView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/layout_border"
-                            android:text="Test"
-                            android:textColor="#FFF"></TextView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/layout_border"
-                            android:text="Test"
-                            android:textColor="#FFF"></TextView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/layout_border"
-                            android:text="Test"
-                            android:textColor="#FFF"></TextView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/layout_border"
-                            android:text="Test"
-                            android:textColor="#FFF"></TextView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/layout_border"
-                            android:text="Test"
-                            android:textColor="#FFF"></TextView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/layout_border"
-                            android:text="Test"
-                            android:textColor="#FFF"></TextView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/layout_border"
-                            android:text="Test"
-                            android:textColor="#FFF"></TextView>
-
+                            android:id="@+id/ie_badblur"
+                            android:text="@string/ie_badblur"
+                            style="@style/IEButton">
+                        </TextView>
 
                     </LinearLayout>
 

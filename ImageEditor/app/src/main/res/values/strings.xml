@@ -3,4 +3,8 @@
 
     <string name="btn_select_from_gallery">Select From\nGallery</string>
     <string name="btn_take_picture">Take Picture</string>
+
+    <string name="ie_darken">Darken</string>
+    <string name="ie_lighten">Lighten</string>
+    <string name="ie_badblur">Bad Blur</string>
 </resources>
