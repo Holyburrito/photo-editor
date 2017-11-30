@@ -18,21 +18,30 @@ import com.example.cefle.util.ToastUtil;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+/**
+ * Created by Zach Reznicek on 11/10/17.
+ */
 public class ImageEditActivity extends AppCompatActivity {
 
+    /**
+     * Contains the image Bitmap that is being edited
+     */
     private ImageView imageView;
 
-    private TextView ie_darken;
-    private TextView ie_lighten;
-    private TextView ie_badblur;
+    private TextView editButtonDarken;
+    private TextView editButtonLighten;
+    private TextView editButtonBadBlur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.image_edit_activity);
 
-        // Find all of the layout views
+        // Get references to the components
         findViews();
+
+        // Attach listeners to the components
+        attachListeners();
 
         Intent intent = getIntent();
         try {
@@ -42,7 +51,6 @@ public class ImageEditActivity extends AppCompatActivity {
             imageView.setImageBitmap(selectedImage);
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
-            //
         }
     }
 
@@ -51,6 +59,12 @@ public class ImageEditActivity extends AppCompatActivity {
      */
     private void findViews() {
         imageView = (ImageView) findViewById(R.id.iv_image);
+        editButtonDarken = (TextView) findViewById(R.id.ie_darken);
+        editButtonLighten = (TextView) findViewById(R.id.ie_brighten);
+        editButtonBadBlur = (TextView) findViewById(R.id.ie_badblur);
+    }
+
+    private void attachListeners() {
         imageView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -65,34 +79,27 @@ public class ImageEditActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        ie_darken = (TextView) findViewById(R.id.ie_darken);
-        ie_darken.setOnClickListener(new View.OnClickListener() {
+        editButtonDarken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 imageView.setImageBitmap(BitmapUtil.darken((BitmapDrawable) imageView.getDrawable()));
                 ToastUtil.createAndShow(ImageEditActivity.this, "Image darkened!");
             }
         });
-
-        ie_lighten = (TextView) findViewById(R.id.ie_brighten);
-        ie_lighten.setOnClickListener(new View.OnClickListener() {
+        editButtonLighten.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 imageView.setImageBitmap(BitmapUtil.lighten((BitmapDrawable) imageView.getDrawable()));
                 ToastUtil.createAndShow(ImageEditActivity.this, "Image lightened!");
             }
         });
-
-        ie_badblur = (TextView) findViewById(R.id.ie_badblur);
-        ie_badblur.setOnClickListener(new View.OnClickListener() {
+        editButtonBadBlur.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 imageView.setImageBitmap(BitmapUtil.badBlur((BitmapDrawable) imageView.getDrawable()));
                 ToastUtil.createAndShow(ImageEditActivity.this, "Image blurred!");
             }
         });
-
     }
 
 }

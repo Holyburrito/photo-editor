@@ -14,14 +14,34 @@ import android.widget.LinearLayout;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Created by Zach Reznicek on 11/10/17.
+ */
 public class DashboardActivity extends AppCompatActivity {
 
+    /**
+     * The Intent requestCode for selecting an image from the gallery
+     */
     private static final int REQUEST_CODE_SELECT_FROM_GALLERY = 100;
+
+    /**
+     * The Intent requestCode for using the camera to capture an image
+     */
     private static final int REQUEST_CODE_CAPTURE_IMAGE = 200;
 
+    /**
+     * Holds the Uri for the image captured by the camera
+     */
     private Uri imagePathUri;
 
+    /**
+     * The LinearLayout associated with the gallery selection "button"
+     */
     private LinearLayout selectFromGalleryButton;
+
+    /**
+     * The LinearLayout associated with the capture image "button"
+     */
     private LinearLayout captureImageButton;
 
     @Override
@@ -29,15 +49,27 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard_activity);
 
+        // Get references to the components
         findViews();
+
+        // Attach listeners to the components
         attachListeners();
     }
 
+    /**
+     * Get references to all of the Views and Layout components in the Activity
+     */
     private void findViews() {
         selectFromGalleryButton = (LinearLayout) findViewById(R.id.btn_select_from_gallery);
         captureImageButton = (LinearLayout) findViewById(R.id.btn_capture_image);
     }
 
+    /**
+     * This method adds OnClickListeners to the LinearLayouts associated with the "buttons"
+     * I added click listeners on the Layouts themselves so that the user can click anywhere
+     * within the border and the action will fire, instead of adding the same click listener
+     * implementation on the ImageButton, and the TextView.
+     */
     private void attachListeners() {
 
         selectFromGalleryButton.setOnClickListener(new View.OnClickListener() {
