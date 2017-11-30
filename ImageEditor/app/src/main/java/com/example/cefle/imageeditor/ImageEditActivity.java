@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.cefle.util.BitmapUtil;
@@ -27,6 +28,8 @@ public class ImageEditActivity extends AppCompatActivity {
      * Contains the image Bitmap that is being edited
      */
     private ImageView imageView;
+
+    private ProgressBar progressBar;
 
     private TextView editButtonDarken;
     private TextView editButtonLighten;
@@ -59,6 +62,9 @@ public class ImageEditActivity extends AppCompatActivity {
      */
     private void findViews() {
         imageView = (ImageView) findViewById(R.id.iv_image);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.bringToFront();
+        progressBar.setProgress(50);
         editButtonDarken = (TextView) findViewById(R.id.ie_darken);
         editButtonLighten = (TextView) findViewById(R.id.ie_brighten);
         editButtonBadBlur = (TextView) findViewById(R.id.ie_badblur);
@@ -82,6 +88,7 @@ public class ImageEditActivity extends AppCompatActivity {
         editButtonDarken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setProgress(progressBar.getProgress() + 10);
                 imageView.setImageBitmap(BitmapUtil.darken((BitmapDrawable) imageView.getDrawable()));
                 ToastUtil.createAndShow(ImageEditActivity.this, "Image darkened!");
             }
