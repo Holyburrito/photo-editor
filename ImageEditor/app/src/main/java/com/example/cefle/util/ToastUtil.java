@@ -1,4 +1,4 @@
-package com.example.cefle.imageeditor;
+package com.example.cefle.util;
 
 import android.app.Activity;
 import android.view.Gravity;
@@ -7,13 +7,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cefle.imageeditor.R;
+
 /**
- * Created by Buster on 11/29/2017.
+ * Created by Zach Reznicek on 11/29/2017.
  */
 public class ToastUtil {
 
+    /**
+     * Holds a reference the last-displayed custom toast
+     */
     private static Toast lastToast;
 
+    /**
+     * Creates and shows a custom Toast
+     * @param activity - The activity creating the Toast
+     * @param message - The toast's text
+     */
     public static void createAndShow(Activity activity, String message) {
 
         // If there is already a toast active, cancel it so that it fades out

@@ -1,19 +1,34 @@
-package com.example.cefle.imageeditor;
+package com.example.cefle.util;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 
 /**
- * Created by Buster on 11/12/2017.
+ * Created by Zach Reznicek on 11/12/2017.
  */
-
 public class BitmapUtil {
 
+    /**
+     * The size of the blur radius neighborhood
+     */
     public static final int BLUR_RADIUS = 2;
-    public static final float DARKEN_AMOUNT = 0.80f;
-    public static final float BRIGHTEN_AMOUNT = 1.20f;
 
+    /**
+     * The factor at which to scale the ARGB values when darkening a Bitmap
+     */
+    public static final float DARKEN_AMOUNT = 0.80f;
+
+    /**
+     * The factor at which to scale the ARGB values when lightening a Bitmap
+     */
+    public static final float LIGHTEN_AMOUNT = 1.20f;
+
+    /**
+     * Blurs a Bitmap using a slow algorithm
+     * @param bitmapDrawable - The BitmapDrawable to extract a bitmap from and blur
+     * @return The blurred bitmap
+     */
     public static Bitmap badBlur(BitmapDrawable bitmapDrawable) {
 
         // Get the copy and its dimensions
@@ -64,6 +79,11 @@ public class BitmapUtil {
         return blurred;
     }
 
+    /**
+     * Darken a Bitmap
+     * @param bitmapDrawable - The BitmapDrawable to extract a bitmap from to darken
+     * @return The darkened bitmap
+     */
     public static Bitmap darken(BitmapDrawable bitmapDrawable) {
         Bitmap bmp = bitmapDrawable.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
         for (int i = 0; i < bmp.getHeight(); i++) {
@@ -76,12 +96,17 @@ public class BitmapUtil {
         return bmp;
     }
 
+    /**
+     * Lighten a Bitmap
+     * @param bitmapDrawable - The BitmapDrawable to extract a bitmap from to lighten
+     * @return The lightened bitmap
+     */
     public static Bitmap lighten(BitmapDrawable bitmapDrawable) {
         Bitmap bmp = bitmapDrawable.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
         for (int i = 0; i < bmp.getHeight(); i++) {
             for (int j = 0; j < bmp.getWidth(); j++) {
                 int colorInt = bmp.getPixel(j, i);
-                int newColor = ColorUtil.modifyColor(colorInt, BRIGHTEN_AMOUNT);
+                int newColor = ColorUtil.modifyColor(colorInt, LIGHTEN_AMOUNT);
                 bmp.setPixel(j, i, newColor);
             }
         }
