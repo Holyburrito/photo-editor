@@ -5,14 +5,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.cefle.tasks.BitmapTasks;
 import com.example.cefle.util.BitmapUtil;
 import com.example.cefle.util.ToastUtil;
 
@@ -24,16 +26,19 @@ import java.io.InputStream;
  */
 public class ImageEditActivity extends AppCompatActivity {
 
+    private AsyncTask test;
+
     /**
      * Contains the image Bitmap that is being edited
      */
     private ImageView imageView;
-
     private ProgressBar progressBar;
 
     private TextView editButtonDarken;
     private TextView editButtonLighten;
     private TextView editButtonBadBlur;
+
+    final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,49 +69,52 @@ public class ImageEditActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.iv_image);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.bringToFront();
-        progressBar.setProgress(50);
+        progressBar.setVisibility(View.INVISIBLE);
         editButtonDarken = (TextView) findViewById(R.id.ie_darken);
         editButtonLighten = (TextView) findViewById(R.id.ie_brighten);
         editButtonBadBlur = (TextView) findViewById(R.id.ie_badblur);
     }
 
     private void attachListeners() {
-        imageView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+        // imageView.setOnTouchListener();
 
-                final int action = motionEvent.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN: {
-
-                    }
-                }
-
-                return true;
-            }
-        });
         editButtonDarken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressBar.setProgress(progressBar.getProgress() + 10);
-                imageView.setImageBitmap(BitmapUtil.darken((BitmapDrawable) imageView.getDrawable()));
-                ToastUtil.createAndShow(ImageEditActivity.this, "Image darkened!");
+                test = new BitmapTasks.Darken(ImageEditActivity.this);
+                ((BitmapTasks.Darken) test).execute();
             }
         });
         editButtonLighten.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imageView.setImageBitmap(BitmapUtil.lighten((BitmapDrawable) imageView.getDrawable()));
-                ToastUtil.createAndShow(ImageEditActivity.this, "Image lightened!");
+                test = new BitmapTasks.Lighten(ImageEditActivity.this);
+                ((BitmapTasks.Lighten) test).execute();
             }
         });
         editButtonBadBlur.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imageView.setImageBitmap(BitmapUtil.badBlur((BitmapDrawable) imageView.getDrawable()));
-                ToastUtil.createAndShow(ImageEditActivity.this, "Image blurred!");
+                test = new BitmapTasks.Blur(ImageEditActivity.this);
+                ((BitmapTasks.Blur) test).execute();
             }
         });
+    }
+
+    public Bitmap getBitmap() {
+        return ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+    }
+
+    public void setBitmap(Bitmap bmp) {
+        imageView.setImageBitmap(bmp);
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
+    public void setProgressBarProgress(int progress) {
+        progressBar.setProgress(progress);
     }
 
 }

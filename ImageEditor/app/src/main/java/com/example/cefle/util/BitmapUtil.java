@@ -3,6 +3,7 @@ package com.example.cefle.util;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.widget.ProgressBar;
 
 /**
  * Created by Zach Reznicek on 11/12/2017.
@@ -84,7 +85,7 @@ public class BitmapUtil {
      * @param bitmapDrawable - The BitmapDrawable to extract a bitmap from to darken
      * @return The darkened bitmap
      */
-    public static Bitmap darken(BitmapDrawable bitmapDrawable) {
+    public static Bitmap darken(BitmapDrawable bitmapDrawable, ProgressBar pb) {
         Bitmap bmp = bitmapDrawable.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
         for (int i = 0; i < bmp.getHeight(); i++) {
             for (int j = 0; j < bmp.getWidth(); j++) {
@@ -93,6 +94,7 @@ public class BitmapUtil {
                 bmp.setPixel(j, i, newColor);
             }
         }
+        pb.setProgress(pb.getProgress() + 10);
         return bmp;
     }
 
