@@ -15,8 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.cefle.tasks.BitmapTasks;
-import com.example.cefle.util.BitmapUtil;
-import com.example.cefle.util.ToastUtil;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -26,7 +24,7 @@ import java.io.InputStream;
  */
 public class ImageEditActivity extends AppCompatActivity {
 
-    private AsyncTask test;
+    private AsyncTask currentTask;
 
     /**
      * Contains the image Bitmap that is being edited
@@ -81,24 +79,43 @@ public class ImageEditActivity extends AppCompatActivity {
         editButtonDarken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                test = new BitmapTasks.Darken(ImageEditActivity.this);
-                ((BitmapTasks.Darken) test).execute();
+                if (isTaskFinished()) {
+                    currentTask = new BitmapTasks.Darken(ImageEditActivity.this);
+                    ((BitmapTasks.Darken) currentTask).execute();
+                }
             }
         });
         editButtonLighten.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                test = new BitmapTasks.Lighten(ImageEditActivity.this);
-                ((BitmapTasks.Lighten) test).execute();
+                if (isTaskFinished()) {
+                    currentTask = new BitmapTasks.Lighten(ImageEditActivity.this);
+                    ((BitmapTasks.Lighten) currentTask).execute();
+                }
             }
         });
         editButtonBadBlur.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                test = new BitmapTasks.Blur(ImageEditActivity.this);
-                ((BitmapTasks.Blur) test).execute();
+                if (isTaskFinished()) {
+                    currentTask = new BitmapTasks.Blur(ImageEditActivity.this);
+                    ((BitmapTasks.Blur) currentTask).execute();
+                }
             }
         });
+    }
+
+    /**
+     * Tests to make sure that the current task running is finished
+     * @return True The current task is finished (or null)
+     * @return False The current task is not finished
+     */
+    private boolean isTaskFinished() {
+        if (currentTask == null || currentTask.getStatus() == AsyncTask.Status.FINISHED) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Bitmap getBitmap() {
