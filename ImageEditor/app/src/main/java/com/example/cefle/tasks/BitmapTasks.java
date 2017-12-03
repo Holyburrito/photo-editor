@@ -2,11 +2,8 @@ package com.example.cefle.tasks;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import com.example.cefle.imageeditor.ImageEditActivity;
 import com.example.cefle.util.ColorUtil;
@@ -22,17 +19,17 @@ public class BitmapTasks {
     /**
      * The size of the blur radius neighborhood
      */
-    public static final int BLUR_RADIUS = 3;
+    private static final int BLUR_RADIUS = 3;
 
     /**
      * The factor at which to scale the ARGB values when darkening a Bitmap
      */
-    public static final float DARKEN_AMOUNT = 0.80f;
+    private static final float DARKEN_AMOUNT = 0.80f;
 
     /**
      * The factor at which to scale the ARGB values when lightening a Bitmap
      */
-    public static final float LIGHTEN_AMOUNT = 1.20f;
+    private static final float LIGHTEN_AMOUNT = 1.20f;
 
     public static class Darken extends AsyncTask<Void, Integer, Bitmap> {
 
@@ -64,13 +61,13 @@ public class BitmapTasks {
 
         @Override
         protected void onProgressUpdate(Integer... integers) {
-            iea.get().setProgressBarProgress(integers[0]);
+            iea.get().setTaskProgress(integers[0]);
         }
 
         @Override
         protected void onPostExecute(Bitmap result) {
             iea.get().setBitmap(result);
-            iea.get().setProgressBarProgress(0);
+            iea.get().setTaskProgress(0);
             iea.get().getProgressBar().setVisibility(View.GONE);
             ToastUtil.createAndShow(iea.get(), "Darken Completed!");
         }
@@ -146,13 +143,13 @@ public class BitmapTasks {
 
         @Override
         protected void onProgressUpdate(Integer... integers) {
-            iea.get().setProgressBarProgress(integers[0]);
+            iea.get().setTaskProgress(integers[0]);
         }
 
         @Override
         protected void onPostExecute(Bitmap result) {
             iea.get().setBitmap(result);
-            iea.get().setProgressBarProgress(0);
+            iea.get().setTaskProgress(0);
             iea.get().getProgressBar().setVisibility(View.GONE);
             ToastUtil.createAndShow(iea.get(), "Blur Completed!");
         }
@@ -188,13 +185,13 @@ public class BitmapTasks {
 
         @Override
         protected void onProgressUpdate(Integer... integers) {
-            iea.get().setProgressBarProgress(integers[0]);
+            iea.get().setTaskProgress(integers[0]);
         }
 
         @Override
         protected void onPostExecute(Bitmap result) {
             iea.get().setBitmap(result);
-            iea.get().setProgressBarProgress(0);
+            iea.get().setTaskProgress(0);
             iea.get().getProgressBar().setVisibility(View.GONE);
             ToastUtil.createAndShow(iea.get(), "Lighten Completed!");
         }

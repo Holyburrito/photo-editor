@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.cefle.tasks.BitmapTasks;
+import com.example.cefle.util.ToastUtil;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -24,19 +25,27 @@ import java.io.InputStream;
  */
 public class ImageEditActivity extends AppCompatActivity {
 
+    /**
+     * Image editing tasks are all subclasses of AsyncTask.
+     * When the user starts a task, this variable keeps a
+     * reference to the current (most recently started) task.
+     */
     private AsyncTask currentTask;
 
     /**
      * Contains the image Bitmap that is being edited
      */
     private ImageView imageView;
+
+    /**
+     * ProgressBar to show the user a visual indication of the editing
+     * task's progress
+     */
     private ProgressBar progressBar;
 
     private TextView editButtonDarken;
     private TextView editButtonLighten;
     private TextView editButtonBadBlur;
-
-    final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +66,7 @@ public class ImageEditActivity extends AppCompatActivity {
             imageView.setImageBitmap(selectedImage);
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
+            ToastUtil.createAndShow(this, "Image cannot be found!");
         }
     }
 
@@ -73,6 +83,9 @@ public class ImageEditActivity extends AppCompatActivity {
         editButtonBadBlur = (TextView) findViewById(R.id.ie_badblur);
     }
 
+    /**
+     * Attach event listeners to the various View components of ImageEditActivity
+     */
     private void attachListeners() {
         // imageView.setOnTouchListener();
 
@@ -106,9 +119,24 @@ public class ImageEditActivity extends AppCompatActivity {
     }
 
     /**
+     * Overriding the onBackPressed() method to make sure and cancel any
+     * running tasks before finishing the activity and returning
+     */
+    @Override
+    public void onBackPressed() {
+        // If a task is currently running, stop it before finishing
+        if (!isTaskFinished()) {
+            currentTask.cancel(true);
+        }
+
+        // Finish the activity and go back
+        finish();
+    }
+
+    /**
      * Tests to make sure that the current task running is finished
-     * @return True The current task is finished (or null)
-     * @return False The current task is not finished
+     * @return True if the current task is finished (or null)
+     * or False if the current task is not finished
      */
     private boolean isTaskFinished() {
         if (currentTask == null || currentTask.getStatus() == AsyncTask.Status.FINISHED) {
@@ -118,19 +146,43 @@ public class ImageEditActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Get the ImageView's Bitmap object
+     * @return The Bitmap associated with the ImageView
+     */
     public Bitmap getBitmap() {
         return ((BitmapDrawable) imageView.getDrawable()).getBitmap();
     }
 
+    /**
+     * Set the ImageView's image with a Bitmap
+     * @param bmp The Bitmap to set the ImageView's image to
+     */
     public void setBitmap(Bitmap bmp) {
         imageView.setImageBitmap(bmp);
     }
 
+    /**
+     * Get progressBar
+     * @return progressBar
+     */
     public ProgressBar getProgressBar() {
         return progressBar;
     }
 
-    public void setProgressBarProgress(int progress) {
+    /**
+     * Get the progress value of progressBar
+     * @return The progress integer value of progressBar
+     */
+    public int getTaskProgress() {
+        return progressBar.getProgress();
+    }
+
+    /**
+     * Set the progress value of progressBar
+     * @param progress The integer value to set progressBar's progress value to
+     */
+    public void setTaskProgress(int progress) {
         progressBar.setProgress(progress);
     }
 
