@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#07070d</color>
     <color name="colorAccent">#4e6086</color>
     <color name="colorAccentLight">#94ade1</color>
+    <color name="ic_tree_launcher_background">#26A69A</color>
 </resources>
