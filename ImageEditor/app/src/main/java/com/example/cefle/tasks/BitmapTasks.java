@@ -210,6 +210,150 @@ public class BitmapTasks {
         }
     }
 
+    public static class Saturate extends AsyncTask<Void, Integer, Bitmap> {
+
+        private final WeakReference<ImageEditActivity> iea;
+
+        public Saturate(ImageEditActivity iea) {
+            this.iea = new WeakReference<>(iea);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.getProgressBar().setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... voids) {
+            // TODO: 12/4/2017  Saturate image
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... integers) {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setTaskProgress(integers[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setBitmap(result);
+            activity.setTaskProgress(0);
+            activity.getProgressBar().setVisibility(View.GONE);
+            ToastUtil.createAndShow(activity, "Saturation Completed!");
+        }
+    }
+
+    public static class Unsaturate extends AsyncTask<Void, Integer, Bitmap> {
+
+        private final WeakReference<ImageEditActivity> iea;
+
+        public Unsaturate(ImageEditActivity iea) {
+            this.iea = new WeakReference<>(iea);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.getProgressBar().setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... voids) {
+            //// TODO: 12/4/2017 De-saturate image
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... integers) {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setTaskProgress(integers[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setBitmap(result);
+            activity.setTaskProgress(0);
+            activity.getProgressBar().setVisibility(View.GONE);
+            ToastUtil.createAndShow(activity, "Desaturation Completed!");
+        }
+    }
+
+    public static class Decolorize extends AsyncTask<Void, Integer, Bitmap> {
+
+        private final WeakReference<ImageEditActivity> iea;
+
+        public Decolorize(ImageEditActivity iea) {
+            this.iea = new WeakReference<>(iea);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.getProgressBar().setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... voids) {
+            return null;
+            // TODO: 12/4/2017 de-colorize image
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... integers) {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setTaskProgress(integers[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setBitmap(result);
+            activity.setTaskProgress(0);
+            activity.getProgressBar().setVisibility(View.GONE);
+            ToastUtil.createAndShow(activity, "Decolorization Completed!");
+        }
+    }
+
+    public static class Colorize extends AsyncTask<Void, Integer, Bitmap> {
+
+        private final WeakReference<ImageEditActivity> iea;
+
+        public Colorize(ImageEditActivity iea) {
+            this.iea = new WeakReference<>(iea);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.getProgressBar().setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... voids) {
+            // TODO: 12/4/2017 colorize image
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... integers) {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setTaskProgress(integers[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setBitmap(result);
+            activity.setTaskProgress(0);
+            activity.getProgressBar().setVisibility(View.GONE);
+            ToastUtil.createAndShow(activity, "Colorization Completed!");
+        }
+    }
+
     /**
      * Helper method for the inner static AsyncTasks to make sure that the reference
      * exists before using it. Protects against NullPointerException in the case that
