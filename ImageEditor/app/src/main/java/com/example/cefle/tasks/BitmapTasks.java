@@ -41,12 +41,15 @@ public class BitmapTasks {
 
         @Override
         protected void onPreExecute() {
-            iea.get().getProgressBar().setVisibility(View.VISIBLE);
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.getProgressBar().setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-            Bitmap bmp = iea.get().getBitmap().copy(Bitmap.Config.ARGB_8888, true);
+            publishProgress(0);
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
             for (int i = 0; i < bmp.getHeight(); i++) {
                 for (int j = 0; j < bmp.getWidth(); j++) {
                     int colorInt = bmp.getPixel(j, i);
@@ -61,15 +64,18 @@ public class BitmapTasks {
 
         @Override
         protected void onProgressUpdate(Integer... integers) {
-            iea.get().setTaskProgress(integers[0]);
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setTaskProgress(integers[0]);
         }
+
 
         @Override
         protected void onPostExecute(Bitmap result) {
-            iea.get().setBitmap(result);
-            iea.get().setTaskProgress(0);
-            iea.get().getProgressBar().setVisibility(View.GONE);
-            ToastUtil.createAndShow(iea.get(), "Darken Completed!");
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setBitmap(result);
+            activity.setTaskProgress(0);
+            activity.getProgressBar().setVisibility(View.GONE);
+            ToastUtil.createAndShow(activity, "Darken Completed!");
         }
     }
 
@@ -83,15 +89,15 @@ public class BitmapTasks {
 
         @Override
         protected void onPreExecute() {
-            iea.get().getProgressBar().setVisibility(View.VISIBLE);
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.getProgressBar().setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
             publishProgress(0);
-
-            // Get the copy and its dimensions
-            Bitmap copy = iea.get().getBitmap().copy(Bitmap.Config.ARGB_8888, true);
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            Bitmap copy = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
             int width = copy.getWidth();
             int height = copy.getHeight();
 
@@ -143,15 +149,17 @@ public class BitmapTasks {
 
         @Override
         protected void onProgressUpdate(Integer... integers) {
-            iea.get().setTaskProgress(integers[0]);
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setTaskProgress(integers[0]);
         }
 
         @Override
         protected void onPostExecute(Bitmap result) {
-            iea.get().setBitmap(result);
-            iea.get().setTaskProgress(0);
-            iea.get().getProgressBar().setVisibility(View.GONE);
-            ToastUtil.createAndShow(iea.get(), "Blur Completed!");
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setBitmap(result);
+            activity.setTaskProgress(0);
+            activity.getProgressBar().setVisibility(View.GONE);
+            ToastUtil.createAndShow(activity, "Blur Completed!");
         }
     }
 
@@ -165,12 +173,15 @@ public class BitmapTasks {
 
         @Override
         protected void onPreExecute() {
-            iea.get().getProgressBar().setVisibility(View.VISIBLE);
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.getProgressBar().setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-            Bitmap bmp = iea.get().getBitmap().copy(Bitmap.Config.ARGB_8888, true);
+            publishProgress(0);
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
             for (int i = 0; i < bmp.getHeight(); i++) {
                 for (int j = 0; j < bmp.getWidth(); j++) {
                     int colorInt = bmp.getPixel(j, i);
@@ -185,15 +196,33 @@ public class BitmapTasks {
 
         @Override
         protected void onProgressUpdate(Integer... integers) {
-            iea.get().setTaskProgress(integers[0]);
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setTaskProgress(integers[0]);
         }
 
         @Override
         protected void onPostExecute(Bitmap result) {
-            iea.get().setBitmap(result);
-            iea.get().setTaskProgress(0);
-            iea.get().getProgressBar().setVisibility(View.GONE);
-            ToastUtil.createAndShow(iea.get(), "Lighten Completed!");
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setBitmap(result);
+            activity.setTaskProgress(0);
+            activity.getProgressBar().setVisibility(View.GONE);
+            ToastUtil.createAndShow(activity, "Lighten Completed!");
+        }
+    }
+
+    /**
+     * Helper method for the inner static AsyncTasks to make sure that the reference
+     * exists before using it. Protects against NullPointerException in the case that
+     * the activity is removed before the task completes
+     * @param iea The WeakReference to check
+     * @throws IllegalStateException if the reference has been broken
+     * @return The ImageEditActivity within the reference
+     */
+    public static ImageEditActivity getReferenceIfExists(WeakReference<ImageEditActivity> iea) {
+        if (iea.get() != null) {
+            return iea.get();
+        } else {
+            throw new IllegalStateException("");
         }
     }
 
