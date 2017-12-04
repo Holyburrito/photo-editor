@@ -7,4 +7,8 @@
     <string name="ie_darken">Darken</string>
     <string name="ie_lighten">Lighten</string>
     <string name="ie_badblur">Bad Blur</string>
+    <string name="ie_saturate">Saturate</string>
+    <string name="ie_unsaturate">Desaturate</string>
+    <string name="ie_colorize">Colorize</string>
+    <string name="ie_decolorize">Decolorize</string>
 </resources>

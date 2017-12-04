@@ -73,6 +73,27 @@
                             style="@style/IEButton">
                         </TextView>
 
+                        <TextView
+                            android:id="@+id/ie_sturate"
+                            android:text="@string/ie_saturate"
+                            style="@style/IEButton">
+                        </TextView>
+                        <TextView
+                            android:id="@+id/ie_unsaturate"
+                            android:text="@string/ie_unsaturate"
+                            style="@style/IEButton">
+                        </TextView>
+                        <TextView
+                            android:id="@+id/ie_colorize"
+                            android:text="@string/ie_colorize"
+                            style="@style/IEButton">
+                        </TextView>
+                        <TextView
+                            android:id="@+id/ie_decolorize"
+                            android:text="@string/ie_decolorize"
+                            style="@style/IEButton">
+                        </TextView>
+
                     </LinearLayout>
 
                 </HorizontalScrollView>
