@@ -226,11 +226,9 @@ public class BitmapTasks {
     public static class Rotate extends AsyncTask<Void, Integer, Bitmap> {
 
         private final WeakReference<ImageEditActivity> iea;
-        private final int rotation;
 
-        public Rotate(ImageEditActivity iea, int rotation) {
+        public Rotate(ImageEditActivity iea) {
             this.iea = new WeakReference<>(iea);
-            this.rotation = rotation;
         }
 
         @Override

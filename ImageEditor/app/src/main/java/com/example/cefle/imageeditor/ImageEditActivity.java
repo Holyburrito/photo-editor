@@ -154,6 +154,15 @@ public class ImageEditActivity extends AppCompatActivity {
                 }
             }
         });
+        editButtonRotate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isTaskFinished()) {
+                    currentTask = new BitmapTasks.Rotate(ImageEditActivity.this);
+                    ((BitmapTasks.Rotate) currentTask).execute();
+                }
+            }
+        });
     }
 
     /**
