@@ -9,6 +9,5 @@
     <string name="ie_badblur">Bad Blur</string>
     <string name="ie_desaturate">Desaturate</string>
     <string name="ie_saturate">Saturate</string>
-    <string name="ie_unsaturate">Unsaturate</string>
     <string name="ie_rotate">Rotate</string>
 </resources>

@@ -55,7 +55,6 @@ public class ImageEditActivity extends AppCompatActivity {
     private TextView editButtonBadBlur;
     private TextView editButtonDesaturate;
     private TextView editButtonSaturate;
-    private TextView editButtonUnsaturate;
     private TextView editButtonRotate;
 
     @Override
@@ -96,7 +95,6 @@ public class ImageEditActivity extends AppCompatActivity {
         editButtonBadBlur = (TextView) findViewById(R.id.ie_badblur);
         editButtonDesaturate = (TextView) findViewById(R.id.ie_desaturate);
         editButtonSaturate = (TextView) findViewById(R.id.ie_saturate);
-        editButtonUnsaturate = (TextView) findViewById(R.id.ie_unsaturate);
         editButtonRotate = (TextView) findViewById(R.id.ie_rotate);
     }
 
@@ -148,15 +146,6 @@ public class ImageEditActivity extends AppCompatActivity {
                 if (isTaskFinished()) {
                     currentTask = new BitmapTasks.Saturate(ImageEditActivity.this);
                     ((BitmapTasks.Saturate) currentTask).execute();
-                }
-            }
-        });
-        editButtonUnsaturate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isTaskFinished()) {
-                    currentTask = new BitmapTasks.Unsaturate(ImageEditActivity.this);
-                    ((BitmapTasks.Unsaturate) currentTask).execute();
                 }
             }
         });

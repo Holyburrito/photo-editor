@@ -86,12 +86,6 @@
                         </TextView>
 
                         <TextView
-                            android:id="@+id/ie_unsaturate"
-                            android:text="@string/ie_unsaturate"
-                            style="@style/IEButton">
-                        </TextView>
-
-                        <TextView
                             android:id="@+id/ie_rotate"
                             android:text="@string/ie_rotate"
                             style="@style/IEButton">
