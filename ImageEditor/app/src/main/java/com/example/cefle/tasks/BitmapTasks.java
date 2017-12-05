@@ -40,7 +40,7 @@ public class BitmapTasks {
     /**
      * An arbitrary low value for saturation used for de-saturating a Bitmap
      */
-    private static final float LOW_SATURATION = 0.25f;
+    private static final float LOW_SATURATION = 0.0f;
 
 
 
