@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.example.cefle.tasks.BitmapTasks;
 import com.example.cefle.util.ToastUtil;
 
+import org.w3c.dom.Text;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -46,6 +48,9 @@ public class ImageEditActivity extends AppCompatActivity {
     private TextView editButtonDarken;
     private TextView editButtonLighten;
     private TextView editButtonBadBlur;
+    private TextView editButtonDesaturate;
+    private TextView editButtonSaturate;
+    private TextView editButtonUnsaturate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +83,13 @@ public class ImageEditActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.bringToFront();
         progressBar.setVisibility(View.INVISIBLE);
+
         editButtonDarken = (TextView) findViewById(R.id.ie_darken);
         editButtonLighten = (TextView) findViewById(R.id.ie_brighten);
         editButtonBadBlur = (TextView) findViewById(R.id.ie_badblur);
+        editButtonDesaturate = (TextView) findViewById(R.id.ie_desaturate);
+        editButtonSaturate = (TextView) findViewById(R.id.ie_saturate);
+        editButtonUnsaturate = (TextView) findViewById(R.id.ie_unsaturate);
     }
 
     /**
@@ -113,6 +122,33 @@ public class ImageEditActivity extends AppCompatActivity {
                 if (isTaskFinished()) {
                     currentTask = new BitmapTasks.Blur(ImageEditActivity.this);
                     ((BitmapTasks.Blur) currentTask).execute();
+                }
+            }
+        });
+        editButtonDesaturate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isTaskFinished()) {
+                    currentTask = new BitmapTasks.Desaturate(ImageEditActivity.this);
+                    ((BitmapTasks.Desaturate) currentTask).execute();
+                }
+            }
+        });
+        editButtonSaturate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isTaskFinished()) {
+                    currentTask = new BitmapTasks.Saturate(ImageEditActivity.this);
+                    ((BitmapTasks.Saturate) currentTask).execute();
+                }
+            }
+        });
+        editButtonUnsaturate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isTaskFinished()) {
+                    currentTask = new BitmapTasks.Unsaturate(ImageEditActivity.this);
+                    ((BitmapTasks.Unsaturate) currentTask).execute();
                 }
             }
         });

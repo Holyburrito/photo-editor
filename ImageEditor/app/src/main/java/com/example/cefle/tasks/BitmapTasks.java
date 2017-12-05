@@ -408,6 +408,22 @@ public class BitmapTasks {
             return bmp;
         }
 
+        @Override
+        protected void onProgressUpdate(Integer... integers) {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setTaskProgress(integers[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setBitmap(result);
+            activity.setTaskProgress(0);
+            activity.getProgressBar().setVisibility(View.GONE);
+            ToastUtil.createAndShow(activity, "Unsaturation Completed!");
+        }
+    }
+
     /**
      * Helper method for the inner static AsyncTasks to make sure that the reference
      * exists before using it. Protects against NullPointerException in the case that

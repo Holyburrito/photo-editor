@@ -1,6 +1,8 @@
 package com.example.cefle.imageeditor;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
@@ -18,6 +20,8 @@ import java.io.IOException;
  * Created by Zach Reznicek on 11/10/17.
  */
 public class DashboardActivity extends AppCompatActivity {
+
+    private static final int MY_REQUEST_CODE = 123;
 
     /**
      * The Intent requestCode for selecting an image from the gallery
@@ -48,6 +52,13 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard_activity);
+
+        if (checkSelfPermission(Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(new String[]{Manifest.permission.CAMERA},
+                    MY_REQUEST_CODE);
+        }
 
         // Get references to the components
         findViews();
@@ -128,5 +139,15 @@ public class DashboardActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Now user should be able to use camera
+            }
+        }
     }
 }
