@@ -424,6 +424,76 @@ public class BitmapTasks {
         }
     }
 
+    public static class Decolorize extends AsyncTask<Void, Integer, Bitmap> {
+
+        private final WeakReference<ImageEditActivity> iea;
+
+        public Decolorize(ImageEditActivity iea) {
+            this.iea = new WeakReference<>(iea);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.getProgressBar().setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... voids) {
+            publishProgress(0);
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
+
+            // get contrast value
+            double contrast = Math.pow((100 + 50) / 100, 2);
+
+            for (int i = 0; i < bmp.getHeight(); i++) {
+                for (int j = 0; j < bmp.getWidth(); j++) {
+
+                    // get pixel color
+                    int pixel = bmp.getPixel(j, i);
+                    int A = Color.alpha(pixel);
+                    // apply filter contrast for every channel R, G, B
+                    int R = Color.red(pixel);
+                    R = (int)(((((R / 255.0) - 0.5) * contrast) + 0.5) * 255.0);
+                    if(R < 0) { R = 0; }
+                    else if(R > 255) { R = 255; }
+
+                    int G = Color.red(pixel);
+                    G = (int)(((((G / 255.0) - 0.5) * contrast) + 0.5) * 255.0);
+                    if(G < 0) { G = 0; }
+                    else if(G > 255) { G = 255; }
+
+                    int B = Color.red(pixel);
+                    B = (int)(((((B / 255.0) - 0.5) * contrast) + 0.5) * 255.0);
+                    if(B < 0) { B = 0; }
+                    else if(B > 255) { B = 255; }
+
+                    // set new pixel color to output bitmap
+                    bmp.setPixel(j, i, Color.argb(A, R, G, B));
+                }
+                int progress = (int) (((float) i / (float) bmp.getHeight()) * 100);
+                publishProgress(progress);
+            }
+            return bmp;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... integers) {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setTaskProgress(integers[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setBitmap(result);
+            activity.setTaskProgress(0);
+            activity.getProgressBar().setVisibility(View.GONE);
+            ToastUtil.createAndShow(activity, "Decolorization Completed!");
+        }
+    }
+
     /**
      * Helper method for the inner static AsyncTasks to make sure that the reference
      * exists before using it. Protects against NullPointerException in the case that
