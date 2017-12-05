@@ -91,6 +91,12 @@
                             style="@style/IEButton">
                         </TextView>
 
+                        <TextView
+                            android:id="@+id/ie_rotate"
+                            android:text="@string/ie_rotate"
+                            style="@style/IEButton">
+                        </TextView>
+
                     </LinearLayout>
 
                 </HorizontalScrollView>

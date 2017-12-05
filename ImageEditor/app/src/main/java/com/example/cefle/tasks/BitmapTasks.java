@@ -2,6 +2,7 @@ package com.example.cefle.tasks;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.view.View;
 
@@ -39,7 +40,7 @@ public class BitmapTasks {
     /**
      * An arbitrary low value for saturation used for de-saturating a Bitmap
      */
-    private static final float LOW_SATURATION = 0.25f;
+    private static final float LOW_SATURATION = 0.0f;
 
     public static class Darken extends AsyncTask<Void, Integer, Bitmap> {
 
@@ -238,13 +239,20 @@ public class BitmapTasks {
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
+
             publishProgress(0);
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
 
-            // TODO
+            Matrix matrix = new Matrix();
 
-            return bmp;
+            matrix.postRotate(90);
+
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp,bmp.getWidth(),bmp.getHeight(),true);
+
+            Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+
+            return rotatedBitmap;
         }
 
         @Override
