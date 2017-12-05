@@ -28,6 +28,11 @@ import java.io.InputStream;
 public class ImageEditActivity extends AppCompatActivity {
 
     /**
+     * The amount to scale down the selected image by. Improves performance by a LOT.
+     */
+    private final float SCALE_DOWN_AMOUNT = 0.20f;
+
+    /**
      * Image editing tasks are all subclasses of AsyncTask.
      * When the user starts a task, this variable keeps a
      * reference to the current (most recently started) task.
@@ -67,8 +72,9 @@ public class ImageEditActivity extends AppCompatActivity {
         try {
             final Uri imageUri = intent.getData();
             final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            imageView.setImageBitmap(selectedImage);
+            Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+            Bitmap scaledImage = Bitmap.createScaledBitmap(selectedImage, Math.round(selectedImage.getWidth() * SCALE_DOWN_AMOUNT), Math.round(selectedImage.getHeight() * SCALE_DOWN_AMOUNT), true);
+            imageView.setImageBitmap(scaledImage);
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
             ToastUtil.createAndShow(this, "Image cannot be found!");

@@ -41,8 +41,6 @@ public class BitmapTasks {
      */
     private static final float LOW_SATURATION = 0.25f;
 
-
-
     public static class Darken extends AsyncTask<Void, Integer, Bitmap> {
 
         private final WeakReference<ImageEditActivity> iea;
