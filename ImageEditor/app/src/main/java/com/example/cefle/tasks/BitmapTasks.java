@@ -1,9 +1,18 @@
 package com.example.cefle.tasks;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.os.AsyncTask;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.view.View;
 
 import com.example.cefle.imageeditor.ImageEditActivity;
@@ -20,7 +29,7 @@ public class BitmapTasks {
     /**
      * The size of the blur radius neighborhood
      */
-    private static final int BLUR_RADIUS = 1;
+//    private static final int BLUR_RADIUS = 1;
 
     /**
      * The factor at which to scale the ARGB values when darkening a Bitmap
@@ -42,6 +51,9 @@ public class BitmapTasks {
      */
     private static final float LOW_SATURATION = 0.0f;
 
+    private static final float BITMAP_SCALE = 0.4f;
+    private static final float BLUR_RADIUS = 7.5f;
+
     public static class Darken extends AsyncTask<Void, Integer, Bitmap> {
 
         private final WeakReference<ImageEditActivity> iea;
@@ -61,15 +73,13 @@ public class BitmapTasks {
             publishProgress(0);
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
-            for (int i = 0; i < bmp.getHeight(); i++) {
-                for (int j = 0; j < bmp.getWidth(); j++) {
-                    int colorInt = bmp.getPixel(j, i);
-                    int newColor = ColorUtil.modifyColor(colorInt, DARKEN_AMOUNT);
-                    bmp.setPixel(j, i, newColor);
-                }
-                int progress = (int) (((float) i / (float) bmp.getHeight()) * 100);
-                publishProgress(progress);
-            }
+
+            Canvas canvas = new Canvas(bmp);
+            Paint p = new Paint(Color.RED);
+            ColorFilter filter = new LightingColorFilter(0xFF7F7F7F, 0x00000000);    // darken
+            p.setColorFilter(filter);
+            canvas.drawBitmap(bmp, new Matrix(), p);
+
             return bmp;
         }
 
@@ -109,53 +119,23 @@ public class BitmapTasks {
             publishProgress(0);
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             Bitmap copy = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
-            int width = copy.getWidth();
-            int height = copy.getHeight();
 
-            // Create a blank bitmap the same dimensions as the copy
-            final Bitmap blurred = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            int width = Math.round(copy.getWidth() * BITMAP_SCALE);
+            int height = Math.round(copy.getHeight() * BITMAP_SCALE);
 
-            // For every pixel
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
+            Bitmap inputBitmap = Bitmap.createScaledBitmap(copy, width, height, false);
+            Bitmap outputBitmap = Bitmap.createBitmap(inputBitmap);
 
-                    // Get the neighbor bounds for the pixel
-                    int startY = Math.max(i - BLUR_RADIUS, 0);
-                    int endY = Math.min(i + BLUR_RADIUS, height - 1);
-                    int startX = Math.max(j - BLUR_RADIUS, 0);
-                    int endX = Math.min(j + BLUR_RADIUS, width - 1);
+            RenderScript rs = RenderScript.create(activity.getApplicationContext());
+            ScriptIntrinsicBlur theIntrinsic = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+            Allocation tmpIn = Allocation.createFromBitmap(rs, inputBitmap);
+            Allocation tmpOut = Allocation.createFromBitmap(rs, outputBitmap);
+            theIntrinsic.setRadius(BLUR_RADIUS);
+            theIntrinsic.setInput(tmpIn);
+            theIntrinsic.forEach(tmpOut);
+            tmpOut.copyTo(outputBitmap);
 
-                    // Set up some color variables
-                    int totalA, totalR, totalG, totalB, totalPixels;
-                    totalA = totalR = totalG = totalB = totalPixels = 0;
-
-                    // Loop through the neighbors and add on their color data
-                    for (int currentY = startY; currentY <= endY; currentY++) {
-                        for (int currentX = startX; currentX <= endX; currentX++) {
-                            int currentPixelColor = copy.getPixel(currentX, currentY);
-                            totalA += Color.alpha(currentPixelColor);
-                            totalR += Color.red(currentPixelColor);
-                            totalG += Color.green(currentPixelColor);
-                            totalB += Color.blue(currentPixelColor);
-                            totalPixels++;
-                        }
-                    }
-
-                    // Average the colors
-                    int averagedA = totalA / totalPixels;
-                    int averagedR = totalR / totalPixels;
-                    int averagedG = totalG / totalPixels;
-                    int averagedB = totalB / totalPixels;
-
-                    int newColor = ColorUtil.argbToColorInt(averagedA, averagedR, averagedG, averagedB);
-                    blurred.setPixel(j, i, newColor);
-
-                }
-                int progress = (int) (((float) i / (float) height) * 100);
-                publishProgress(progress);
-            }
-
-            return blurred;
+            return outputBitmap;
         }
 
         @Override
@@ -193,15 +173,12 @@ public class BitmapTasks {
             publishProgress(0);
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
-            for (int i = 0; i < bmp.getHeight(); i++) {
-                for (int j = 0; j < bmp.getWidth(); j++) {
-                    int colorInt = bmp.getPixel(j, i);
-                    int newColor = ColorUtil.modifyColor(colorInt, LIGHTEN_AMOUNT);
-                    bmp.setPixel(j, i, newColor);
-                }
-                int progress = (int) (((float) i / (float) bmp.getHeight()) * 100);
-                publishProgress(progress);
-            }
+
+            Canvas canvas = new Canvas(bmp);
+            Paint p = new Paint(Color.RED);
+            ColorFilter filter = new LightingColorFilter(0xFFFFFFFF , 0x00222222); // lighten
+            p.setColorFilter(filter);
+            canvas.drawBitmap(bmp, new Matrix(), p);
             return bmp;
         }
 
