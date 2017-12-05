@@ -46,6 +46,10 @@ public class ImageEditActivity extends AppCompatActivity {
     private TextView editButtonDarken;
     private TextView editButtonLighten;
     private TextView editButtonBadBlur;
+    private TextView editButtonSaturate;
+    private TextView editButtonDesaturate;
+    private TextView editButtonColorize;
+    private TextView editButtonDecolorize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +85,11 @@ public class ImageEditActivity extends AppCompatActivity {
         editButtonDarken = (TextView) findViewById(R.id.ie_darken);
         editButtonLighten = (TextView) findViewById(R.id.ie_brighten);
         editButtonBadBlur = (TextView) findViewById(R.id.ie_badblur);
+        editButtonSaturate = (TextView) findViewById(R.id.ie_sturate);
+        editButtonDesaturate = (TextView) findViewById(R.id.ie_unsaturate);
+        editButtonColorize = (TextView) findViewById(R.id.ie_colorize);
+        editButtonDecolorize = (TextView) findViewById(R.id.ie_decolorize);
+
     }
 
     /**
@@ -113,6 +122,42 @@ public class ImageEditActivity extends AppCompatActivity {
                 if (isTaskFinished()) {
                     currentTask = new BitmapTasks.Blur(ImageEditActivity.this);
                     ((BitmapTasks.Blur) currentTask).execute();
+                }
+            }
+        });
+        editButtonSaturate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isTaskFinished()) {
+                    currentTask = new BitmapTasks.Darken(ImageEditActivity.this);
+                    ((BitmapTasks.Saturate) currentTask).execute();
+                }
+            }
+        });
+        editButtonDesaturate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isTaskFinished()) {
+                    currentTask = new BitmapTasks.Lighten(ImageEditActivity.this);
+                    ((BitmapTasks.Unsaturate) currentTask).execute();
+                }
+            }
+        });
+        editButtonColorize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isTaskFinished()) {
+                    currentTask = new BitmapTasks.Blur(ImageEditActivity.this);
+                    ((BitmapTasks.Colorize) currentTask).execute();
+                }
+            }
+        });
+        editButtonDecolorize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isTaskFinished()) {
+                    currentTask = new BitmapTasks.Blur(ImageEditActivity.this);
+                    ((BitmapTasks.Decolorize) currentTask).execute();
                 }
             }
         });
