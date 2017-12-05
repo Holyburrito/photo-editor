@@ -5,9 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
@@ -266,20 +270,17 @@ public class BitmapTasks {
             publishProgress(0);
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
-            for (int i = 0; i < bmp.getHeight(); i++) {
-                for (int j = 0; j < bmp.getWidth(); j++) {
-                    int colorInt = bmp.getPixel(j, i);
-                    int red = (int) (Color.red(colorInt) * 0.3f);
-                    int green = (int) (Color.green(colorInt) * 0.59f);
-                    int blue = (int) (Color.blue(colorInt) * 0.11f);
-                    int total = red + green + blue;
-                    int newColor = ColorUtil.argbToColorInt(255, total, total, total);
-                    bmp.setPixel(j, i, newColor);
-                }
-                if (isCancelled()) break;
-                int progress = (int) (((float) i / (float) bmp.getHeight()) * 100);
-                publishProgress(progress);
-            }
+
+            Canvas canvas = new Canvas(bmp);
+            Paint paint = new Paint();
+
+            ColorMatrix matrix = new ColorMatrix();
+            matrix.setSaturation(0);
+            ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+
+            paint.setColorFilter(filter);
+            canvas.drawBitmap(bmp, 0, 0, paint);
+
             return bmp;
         }
 
@@ -320,22 +321,16 @@ public class BitmapTasks {
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
 
-            for (int i = 0; i < bmp.getHeight(); i++) {
-                for (int j = 0; j < bmp.getWidth(); j++) {
+            Canvas canvas = new Canvas(bmp);
+            Paint paint = new Paint();
 
-                    int saturateInt = bmp.getPixel(j, i);
-                    float[] hsv = new float[3];
+            ColorMatrix matrix = new ColorMatrix();
+            matrix.setSaturation(1);
+            ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
 
-                    Color.colorToHSV(saturateInt, hsv);
-                    hsv[1] = HIGH_SATURATION;
+            paint.setColorFilter(filter);
+            canvas.drawBitmap(bmp, 0, 0, paint);
 
-                    saturateInt = Color.HSVToColor(hsv);
-                    bmp.setPixel(j, i, saturateInt);
-                }
-                if (isCancelled()) break;
-                int progress = (int) (((float) i / (float) bmp.getHeight()) * 100);
-                publishProgress(progress);
-            }
             return bmp;
         }
 
