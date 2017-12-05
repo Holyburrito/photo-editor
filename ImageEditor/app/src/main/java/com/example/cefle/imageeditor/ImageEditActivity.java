@@ -98,11 +98,11 @@ public class ImageEditActivity extends AppCompatActivity {
             final Uri imageUri = intent.getData();
             final InputStream imageStream = getContentResolver().openInputStream(imageUri);
             Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            if (selectedImage.getWidth() > 800 || selectedImage.getHeight() > 800) {
+            if (selectedImage.getWidth() > MAXIMUM_SIZE_IMAGE || selectedImage.getHeight() > MAXIMUM_SIZE_IMAGE) {
                 int largerSide = Math.max(selectedImage.getWidth(), selectedImage.getHeight());
                 float ratio = largerSide / MAXIMUM_SIZE_IMAGE;
-                int width = Math.round(selectedImage.getWidth() * ratio);
-                int height = Math.round(selectedImage.getHeight() * ratio);
+                int width = Math.round(selectedImage.getWidth() / ratio);
+                int height = Math.round(selectedImage.getHeight() / ratio);
                 selectedImage = Bitmap.createScaledBitmap(selectedImage, width, height, true);
             }
             imageView.setImageBitmap(selectedImage);
