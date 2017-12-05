@@ -71,7 +71,6 @@ public class BitmapTasks {
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-            publishProgress(0);
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
 
@@ -97,7 +96,6 @@ public class BitmapTasks {
             activity.setBitmap(result);
             activity.setTaskProgress(0);
             activity.getProgressBar().setVisibility(View.GONE);
-            ToastUtil.createAndShow(activity, "Darken Completed!");
         }
     }
 
@@ -118,7 +116,6 @@ public class BitmapTasks {
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-            publishProgress(0);
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             Bitmap copy = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
 
@@ -152,7 +149,6 @@ public class BitmapTasks {
             activity.setBitmap(result);
             activity.setTaskProgress(0);
             activity.getProgressBar().setVisibility(View.GONE);
-            ToastUtil.createAndShow(activity, "Blur Completed!");
         }
     }
 
@@ -173,7 +169,6 @@ public class BitmapTasks {
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-            publishProgress(0);
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
 
@@ -197,7 +192,6 @@ public class BitmapTasks {
             activity.setBitmap(result);
             activity.setTaskProgress(0);
             activity.getProgressBar().setVisibility(View.GONE);
-            ToastUtil.createAndShow(activity, "Lighten Completed!");
         }
     }
 
@@ -218,8 +212,6 @@ public class BitmapTasks {
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-
-            publishProgress(0);
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
 
@@ -246,7 +238,6 @@ public class BitmapTasks {
             activity.setBitmap(result);
             activity.setTaskProgress(0);
             activity.getProgressBar().setVisibility(View.GONE);
-            ToastUtil.createAndShow(activity, "Rotation Completed!");
         }
     }
 
@@ -267,7 +258,54 @@ public class BitmapTasks {
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-            publishProgress(0);
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
+
+            Canvas canvas = new Canvas(bmp);
+            Paint paint = new Paint();
+
+            ColorMatrix matrix = new ColorMatrix();
+            matrix.setSaturation(0.5f);
+            ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+
+            paint.setColorFilter(filter);
+            canvas.drawBitmap(bmp, 0, 0, paint);
+
+            return bmp;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... integers) {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setTaskProgress(integers[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.setBitmap(result);
+            activity.setTaskProgress(0);
+            activity.getProgressBar().setVisibility(View.GONE);
+        }
+    }
+
+    public static class Greyscale extends AsyncTask<Void, Integer, Bitmap> {
+
+        private final WeakReference<ImageEditActivity> iea;
+
+        public Greyscale(ImageEditActivity iea) {
+            this.iea = new WeakReference<>(iea);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            activity.getProgressBar().setVisibility(View.VISIBLE);
+            activity.addUndoableImage(activity.getBitmap());
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... voids) {
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
 
@@ -296,7 +334,6 @@ public class BitmapTasks {
             activity.setBitmap(result);
             activity.setTaskProgress(0);
             activity.getProgressBar().setVisibility(View.GONE);
-            ToastUtil.createAndShow(activity, "Desaturization Completed!");
         }
     }
 
@@ -317,7 +354,6 @@ public class BitmapTasks {
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-            publishProgress(0);
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
 
@@ -325,7 +361,7 @@ public class BitmapTasks {
             Paint paint = new Paint();
 
             ColorMatrix matrix = new ColorMatrix();
-            matrix.setSaturation(1);
+            matrix.setSaturation(1.5f);
             ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
 
             paint.setColorFilter(filter);
@@ -346,7 +382,6 @@ public class BitmapTasks {
             activity.setBitmap(result);
             activity.setTaskProgress(0);
             activity.getProgressBar().setVisibility(View.GONE);
-            ToastUtil.createAndShow(activity, "Saturation Completed!");
         }
     }
 

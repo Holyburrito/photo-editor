@@ -59,7 +59,7 @@ public class ImageEditActivity extends AppCompatActivity {
     /**
      * Number of allowed undos
      */
-    private final int numberOfAllowedUndos = 3;
+    private final int numberOfAllowedUndos = 7;
 
     private final float MAXIMUM_SIZE_IMAGE = 800.0f;
 
@@ -78,6 +78,7 @@ public class ImageEditActivity extends AppCompatActivity {
     private TextView editButtonDesaturate;
     private TextView editButtonSaturate;
     private TextView editButtonRotate;
+    private TextView editButtonGreyscale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +131,7 @@ public class ImageEditActivity extends AppCompatActivity {
         editButtonDesaturate = (TextView) findViewById(R.id.ie_desaturate);
         editButtonSaturate = (TextView) findViewById(R.id.ie_saturate);
         editButtonRotate = (TextView) findViewById(R.id.ie_rotate);
+        editButtonGreyscale = (TextView) findViewById(R.id.ie_greyscale);
     }
 
     /**
@@ -142,7 +144,6 @@ public class ImageEditActivity extends AppCompatActivity {
                 Bitmap oldImage = getUndoableImage();
                 if (oldImage != null) {
                     imageView.setImageBitmap(oldImage);
-                    ToastUtil.createAndShow(ImageEditActivity.this, "Image undo'd");
                 }
             }
         });
@@ -222,6 +223,15 @@ public class ImageEditActivity extends AppCompatActivity {
                 if (isTaskFinished()) {
                     currentTask = new BitmapTasks.Rotate(ImageEditActivity.this);
                     ((BitmapTasks.Rotate) currentTask).execute();
+                }
+            }
+        });
+        editButtonGreyscale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isTaskFinished()) {
+                    currentTask = new BitmapTasks.Greyscale(ImageEditActivity.this);
+                    ((BitmapTasks.Greyscale) currentTask).execute();
                 }
             }
         });

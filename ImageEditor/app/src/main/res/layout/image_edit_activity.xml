@@ -116,6 +116,12 @@
                             style="@style/IEButton">
                         </TextView>
 
+                        <TextView
+                            android:id="@+id/ie_greyscale"
+                            android:text="@string/ie_greyscale"
+                            style="@style/IEButton">
+                        </TextView>
+
                     </LinearLayout>
 
                 </HorizontalScrollView>
