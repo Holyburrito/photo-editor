@@ -5,6 +5,9 @@
     <!-- Declare READ_EXTERNAL_STORAGE permission to allow the DashboardActivity to pass the image's Uri to ImageEditActivity -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
 
+    <!-- Declare READ_EXTERNAL_STORAGE permission to allow the DashboardActivity to save the image -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+
     <!-- Declare CAMERA permission to be able to take pictures from the app -->
     <uses-permission android:name="android.permission.CAMERA"></uses-permission>
 

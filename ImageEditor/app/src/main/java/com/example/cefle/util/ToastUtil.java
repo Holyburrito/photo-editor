@@ -40,7 +40,7 @@ public class ToastUtil {
 
         // Create the toast
         Toast toast = new Toast(activity);
-        toast.setGravity(Gravity.TOP, Gravity.CENTER, Gravity.TOP);
+        toast.setGravity(Gravity.CENTER, Gravity.CENTER, Gravity.CENTER);
         toast.setDuration(Toast.LENGTH_SHORT);
 
         // Attach the view to the toast

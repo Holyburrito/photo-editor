@@ -27,11 +27,6 @@ import java.lang.ref.WeakReference;
 public class BitmapTasks {
 
     /**
-     * The size of the blur radius neighborhood
-     */
-//    private static final int BLUR_RADIUS = 1;
-
-    /**
      * The factor at which to scale the ARGB values when darkening a Bitmap
      */
     private static final float DARKEN_AMOUNT = 0.80f;
@@ -52,6 +47,7 @@ public class BitmapTasks {
     private static final float LOW_SATURATION = 0.0f;
 
     private static final float BITMAP_SCALE = 0.4f;
+
     private static final float BLUR_RADIUS = 3.0f;
 
     public static class Darken extends AsyncTask<Void, Integer, Bitmap> {
@@ -66,6 +62,7 @@ public class BitmapTasks {
         protected void onPreExecute() {
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             activity.getProgressBar().setVisibility(View.VISIBLE);
+            activity.addUndoableImage(activity.getBitmap());
         }
 
         @Override
@@ -112,6 +109,7 @@ public class BitmapTasks {
         protected void onPreExecute() {
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             activity.getProgressBar().setVisibility(View.VISIBLE);
+            activity.addUndoableImage(activity.getBitmap());
         }
 
         @Override
@@ -166,6 +164,7 @@ public class BitmapTasks {
         protected void onPreExecute() {
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             activity.getProgressBar().setVisibility(View.VISIBLE);
+            activity.addUndoableImage(activity.getBitmap());
         }
 
         @Override
@@ -210,6 +209,7 @@ public class BitmapTasks {
         protected void onPreExecute() {
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             activity.getProgressBar().setVisibility(View.VISIBLE);
+            activity.addUndoableImage(activity.getBitmap());
         }
 
         @Override
@@ -258,6 +258,7 @@ public class BitmapTasks {
         protected void onPreExecute() {
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             activity.getProgressBar().setVisibility(View.VISIBLE);
+            activity.addUndoableImage(activity.getBitmap());
         }
 
         @Override
@@ -275,6 +276,7 @@ public class BitmapTasks {
                     int newColor = ColorUtil.argbToColorInt(255, total, total, total);
                     bmp.setPixel(j, i, newColor);
                 }
+                if (isCancelled()) break;
                 int progress = (int) (((float) i / (float) bmp.getHeight()) * 100);
                 publishProgress(progress);
             }
@@ -309,6 +311,7 @@ public class BitmapTasks {
         protected void onPreExecute() {
             ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
             activity.getProgressBar().setVisibility(View.VISIBLE);
+            activity.addUndoableImage(activity.getBitmap());
         }
 
         @Override
@@ -329,6 +332,7 @@ public class BitmapTasks {
                     saturateInt = Color.HSVToColor(hsv);
                     bmp.setPixel(j, i, saturateInt);
                 }
+                if (isCancelled()) break;
                 int progress = (int) (((float) i / (float) bmp.getHeight()) * 100);
                 publishProgress(progress);
             }

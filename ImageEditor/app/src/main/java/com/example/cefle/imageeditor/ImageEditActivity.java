@@ -1,12 +1,15 @@
 package com.example.cefle.imageeditor;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,8 +22,12 @@ import com.example.cefle.util.ToastUtil;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 /**
  * Created by Zach Reznicek on 11/10/17.
@@ -37,7 +44,7 @@ public class ImageEditActivity extends AppCompatActivity {
      * When the user starts a task, this variable keeps a
      * reference to the current (most recently started) task.
      */
-    private AsyncTask currentTask;
+    private static AsyncTask currentTask;
 
     /**
      * Contains the image Bitmap that is being edited
@@ -45,10 +52,25 @@ public class ImageEditActivity extends AppCompatActivity {
     private ImageView imageView;
 
     /**
+     * An ArrayList of stored images that are able to be undo'd
+     */
+    private ArrayList<Bitmap> undoImages;
+
+    /**
+     * Number of allowed undos
+     */
+    private final int numberOfAllowedUndos = 3;
+
+    private final float MAXIMUM_SIZE_IMAGE = 800.0f;
+
+    /**
      * ProgressBar to show the user a visual indication of the editing
      * task's progress
      */
     private ProgressBar progressBar;
+
+    private TextView toolbarButtonUndo;
+    private TextView toolbarButtonSave;
 
     private TextView editButtonDarken;
     private TextView editButtonLighten;
@@ -62,6 +84,9 @@ public class ImageEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.image_edit_activity);
 
+        // Instantiate the array list...forgot this!
+        undoImages = new ArrayList<>();
+
         // Get references to the components
         findViews();
 
@@ -73,8 +98,14 @@ public class ImageEditActivity extends AppCompatActivity {
             final Uri imageUri = intent.getData();
             final InputStream imageStream = getContentResolver().openInputStream(imageUri);
             Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            Bitmap scaledImage = Bitmap.createScaledBitmap(selectedImage, Math.round(selectedImage.getWidth() * SCALE_DOWN_AMOUNT), Math.round(selectedImage.getHeight() * SCALE_DOWN_AMOUNT), true);
-            imageView.setImageBitmap(scaledImage);
+            if (selectedImage.getWidth() > 800 || selectedImage.getHeight() > 800) {
+                int largerSide = Math.max(selectedImage.getWidth(), selectedImage.getHeight());
+                float ratio = largerSide / MAXIMUM_SIZE_IMAGE;
+                int width = Math.round(selectedImage.getWidth() * ratio);
+                int height = Math.round(selectedImage.getHeight() * ratio);
+                selectedImage = Bitmap.createScaledBitmap(selectedImage, width, height, true);
+            }
+            imageView.setImageBitmap(selectedImage);
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
             ToastUtil.createAndShow(this, "Image cannot be found!");
@@ -90,6 +121,9 @@ public class ImageEditActivity extends AppCompatActivity {
         progressBar.bringToFront();
         progressBar.setVisibility(View.INVISIBLE);
 
+        toolbarButtonUndo = (TextView) findViewById(R.id.toolbar_undo);
+        toolbarButtonSave = (TextView) findViewById(R.id.toolbar_save);
+
         editButtonDarken = (TextView) findViewById(R.id.ie_darken);
         editButtonLighten = (TextView) findViewById(R.id.ie_brighten);
         editButtonBadBlur = (TextView) findViewById(R.id.ie_badblur);
@@ -102,8 +136,41 @@ public class ImageEditActivity extends AppCompatActivity {
      * Attach event listeners to the various View components of ImageEditActivity
      */
     private void attachListeners() {
-        // imageView.setOnTouchListener();
-
+        toolbarButtonUndo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bitmap oldImage = getUndoableImage();
+                if (oldImage != null) {
+                    imageView.setImageBitmap(oldImage);
+                    ToastUtil.createAndShow(ImageEditActivity.this, "Image undo'd");
+                }
+            }
+        });
+        toolbarButtonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                String filename = System.nanoTime() + ".png";
+                File file = new File(path, filename);
+                FileOutputStream out = null;
+                try {
+                    out = new FileOutputStream(file);
+                    getBitmap().compress(Bitmap.CompressFormat.PNG, 100, out);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (out != null) {
+                            out.close();
+                            addImageGallery(file);
+                            ToastUtil.createAndShow(ImageEditActivity.this, "Save Complete!");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
         editButtonDarken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,10 +234,8 @@ public class ImageEditActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // If a task is currently running, stop it before finishing
-        if (!isTaskFinished()) {
-            currentTask.cancel(true);
-            currentTask = null;
-        }
+        if (currentTask != null) currentTask.cancel(true);
+        currentTask = null;
 
         // Finish the activity and go back
         finish();
@@ -182,7 +247,7 @@ public class ImageEditActivity extends AppCompatActivity {
      * or False if the current task is not finished
      */
     private boolean isTaskFinished() {
-        if (currentTask == null || currentTask.getStatus() == AsyncTask.Status.FINISHED) {
+        if (currentTask == null || currentTask.getStatus() == AsyncTask.Status.FINISHED || currentTask.isCancelled()) {
             return true;
         } else {
             return false;
@@ -227,6 +292,40 @@ public class ImageEditActivity extends AppCompatActivity {
      */
     public void setTaskProgress(int progress) {
         progressBar.setProgress(progress);
+    }
+
+    /**
+     * Updates the MediaStore by giving it information about where the new file was saved
+     * @param file The file of which to alert the MediaStore of
+     */
+    private void addImageGallery(File file) {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+        getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+    }
+
+    public void addUndoableImage(Bitmap bmp) {
+        if (undoImages.size() < numberOfAllowedUndos) {
+            undoImages.add(bmp);
+        } else {
+            int index = 0;
+            while (index < numberOfAllowedUndos - 1) {
+                undoImages.set(index, undoImages.get(index + 1));
+                index++;
+            }
+            undoImages.set(numberOfAllowedUndos - 1, bmp);
+        }
+        System.out.println("Size of stuff: " + undoImages.size());
+    }
+
+    private Bitmap getUndoableImage() {
+        if (undoImages.size() == 0) {
+            return null;
+        }
+        Bitmap undoImage = undoImages.get(undoImages.size() - 1);
+        undoImages.remove(undoImages.size() - 1);
+        return undoImage;
     }
 
 }
