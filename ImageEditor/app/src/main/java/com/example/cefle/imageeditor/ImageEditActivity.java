@@ -180,6 +180,7 @@ public class ImageEditActivity extends AppCompatActivity {
         // If a task is currently running, stop it before finishing
         if (!isTaskFinished()) {
             currentTask.cancel(true);
+            currentTask = null;
         }
 
         // Finish the activity and go back

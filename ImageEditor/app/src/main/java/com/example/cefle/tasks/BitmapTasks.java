@@ -20,7 +20,7 @@ public class BitmapTasks {
     /**
      * The size of the blur radius neighborhood
      */
-    private static final int BLUR_RADIUS = 3;
+    private static final int BLUR_RADIUS = 1;
 
     /**
      * The factor at which to scale the ARGB values when darkening a Bitmap
