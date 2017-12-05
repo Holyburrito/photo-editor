@@ -31,6 +31,18 @@ public class BitmapTasks {
      */
     private static final float LIGHTEN_AMOUNT = 1.20f;
 
+    /**
+     * The maximum value of color saturation for saturating a Bitmap
+     */
+    private static final float HIGH_SATURATION = 1.0f;
+
+    /**
+     * An arbitrary low value for saturation used for de-saturating a Bitmap
+     */
+    private static final float LOW_SATURATION = 0.25f;
+
+
+
     public static class Darken extends AsyncTask<Void, Integer, Bitmap> {
 
         private final WeakReference<ImageEditActivity> iea;
@@ -226,8 +238,26 @@ public class BitmapTasks {
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-            // TODO: 12/4/2017  Saturate image
-            return null;
+            publishProgress(0);
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
+
+            for (int i = 0; i < bmp.getHeight(); i++) {
+                for (int j = 0; j < bmp.getWidth(); j++) {
+
+                    int saturateInt = bmp.getPixel(j, i);
+                    float[] hsv = new float[3];
+
+                    Color.colorToHSV(saturateInt, hsv);
+                    hsv[1] = HIGH_SATURATION;
+
+                    saturateInt = Color.HSVToColor(hsv);
+                    bmp.setPixel(j, i, saturateInt);
+                }
+                int progress = (int) (((float) i / (float) bmp.getHeight()) * 100);
+                publishProgress(progress);
+            }
+            return bmp;
         }
 
         @Override
@@ -262,8 +292,26 @@ public class BitmapTasks {
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-            //// TODO: 12/4/2017 De-saturate image
-            return null;
+            publishProgress(0);
+            ImageEditActivity activity = BitmapTasks.getReferenceIfExists(iea);
+            Bitmap bmp = activity.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
+
+            for (int i = 0; i < bmp.getHeight(); i++) {
+                for (int j = 0; j < bmp.getWidth(); j++) {
+
+                    int saturateInt = bmp.getPixel(j, i);
+                    float[] hsv = new float[3];
+
+                    Color.colorToHSV(saturateInt, hsv);
+                    hsv[1] = LOW_SATURATION;
+
+                    saturateInt = Color.HSVToColor(hsv);
+                    bmp.setPixel(j, i, saturateInt);
+                }
+                int progress = (int) (((float) i / (float) bmp.getHeight()) * 100);
+                publishProgress(progress);
+            }
+            return bmp;
         }
 
         @Override
